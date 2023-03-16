@@ -6,7 +6,7 @@ import './App.css'
 const WEEK_COUNT=3;
 const HOUR_COUNT=8;
 
-let gunlukAppointment= [];
+let gunlukAppointment= []; // arrays for storing the marked cells
 let haftalikAppointment = [];
 
 
@@ -22,7 +22,6 @@ class App extends React.Component {
 
         }
     }
-
 
 
     moveDaily(arr, i, j){ // this function detects the index of the cell which wanted to be removed and removes it from the appointment array
@@ -118,17 +117,34 @@ class App extends React.Component {
         })
     }
 
+    makeHeaderDate(count) {
+        var date = new Date();
+        date.setDate(date.getDate() + count)
+        var result =  date.getDate() + "." + (date.getMonth() + 1) + "." + (date.getYear() + 1900);
+        return result;
+    }
+
+
 
   getTableContent = () => {
     let header = []
     header.push(<th></th>)
+
+    //var date = new Date() ;
+    //console.log(date)
+    //date.setDate(date.getDate()  + 1)
+    //var result =  date.getDate() + "." + (date.getMonth() + 1) + "." + (date.getYear() + 1900);
+    //console.log(result)
+
     for (var i = 1 + this.state.beginDay  ; i <= WEEK_COUNT * 7 + this.state.beginDay; ++i) {
-      header.push(<th>{i}</th>)
+        var headDate = this.makeHeaderDate(i - 1)
+        header.push(<th>{headDate}</th>)
+        //header.push(<th>{i}</th>)
     }
     let items = []
-    for (let i = 0; i < HOUR_COUNT; i++) {
+    for (let i = 8; i < HOUR_COUNT + 9; i++) { //create hour part in the frame (the first column of the frame )
       let row = []
-      row.push(<td>{i}: </td>)
+      row.push(<td>{i}:00 </td>)
       for (let j = 1; j <= WEEK_COUNT * 7; ++j) {
 
         if(this.isWhichMarked(i,j ) == "notMarked" ) {
