@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+
+
+
+
+table, th, td {
+  	border: 1px solid;
+
+
+}
+
+
+table tr td {
+  width: 40px;
+}
+
+
+
