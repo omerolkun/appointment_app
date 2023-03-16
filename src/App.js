@@ -31,7 +31,9 @@ class App extends React.Component {
         this.state = {
             message: "not hello omer",
             rowNo: 0,
-            colNo: 0
+            colNo: 0,
+            beginDay:0
+
         }
     }
 
@@ -106,8 +108,6 @@ class App extends React.Component {
                 k = 0;
             }
         }
-
-
     }
 
     isWhichMarked(saat, gun) {
@@ -159,14 +159,36 @@ class App extends React.Component {
         }
    }
 
+    slideNextDay(){
+        this.setState({
+            beginDay: this.state.beginDay + 1
+        })
+    }
 
+    slideNextWeek() {
+        this.setState({
+            beginDay: this.state.beginDay + 7
+        })
+    }
+
+    slidePrevDay(){
+        this.setState({
+            beginDay : this.state.beginDay - 1
+        })
+    }
+
+    slidePrevWeek(){
+        this.setState({
+            beginDay: this.state.beginDay - 7
+        })
+    }
 
 ////////////////////END OF REAL PART/////////////////////
 
   getTableContent = () => {
     let header = []
     header.push(<th></th>)
-    for (let i = 1; i <= WEEK_COUNT * 7; ++i) {
+    for (var i = 1 + this.state.beginDay  ; i <= WEEK_COUNT * 7 + this.state.beginDay; ++i) {
       header.push(<th>{i}</th>)
     }
     let items = []
@@ -174,30 +196,12 @@ class App extends React.Component {
       let row = []
       row.push(<td>{i}: </td>)
       for (let j = 1; j <= WEEK_COUNT * 7; ++j) {
-        //   var k = (<td>{i}/{j}</td>)
-       //let k = (<td style="red">{i}/{j}</td>)
-
-        //row.push(<td onClick = {()=> this.sayHello(i,j)}>  </td>)
-        //row.push(k)
-      /*if (colArr[i][j] == 0){
-            row.push(<td onClick = {()=> this.storeMarked(i,j)}>  </td>)
-        }
-        else if (colArr[i][j] == 1){
-            row.push(<td style = {{color:"red"}}  onClick = {()=> this.storeMarked(i,j)}>   </td>)
-        }
-        else if (colArr[i][j] == 2  ){
-            row.push(<td style = {{color:"blue"}} onClick = {()=> this.storeMarked(i,j)}>C  </td>)
-        }
-        else{
-        // do nothing
-        }
-        */
 
         if(this.isWhichMarked(i,j) == "notMarked" ) {
             row.push( <td onClick = {() => this.storeMarkedGenel(i,j)}> </td>  )
 
         }else{
-            if(this.isWhichMarked(i,j ) == "haftalikAppointmentMarked"){
+            if(this.isWhichMarked(i, j ) == "haftalikAppointmentMarked"){
                 row.push(<td style = {{backgroundColor:"darkblue"}}  onClick = {()=> this.storeMarkedGenel(i,j)}>   </td>)
             }
             if(this.isWhichMarked(i,j) == "gunlukAppointmentMarked"){
@@ -221,6 +225,10 @@ class App extends React.Component {
 	render() {
 		return (
 		    <div>
+		        <button onClick = {() => this.slidePrevWeek()}  >  &#60;&#60; </button>
+                <button onClick = {() => this.slidePrevDay()}  >  &#60; </button>
+		        <button onClick = {() => this.slideNextDay()}  > >  </button>
+		        <button onClick = {() => this.slideNextWeek()}  > >> </button>
 				<div>{this.getTableContent()}</div>
 				<div>
 			        <button onClick = {() => this.sayHello()}> clickhello </button>
@@ -232,7 +240,7 @@ class App extends React.Component {
                    <button onClick = {() => this.addDel()}> confirmbutton</button>
                    <h3> dsize is {dSize} </h3>
                    <h2> wsize is {wSize} </h2>
-
+                   <h3> beginday is {this.state.beginDay} </h3>
 				</div>
 			</div>
 		);
