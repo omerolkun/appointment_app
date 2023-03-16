@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import './App.css'
 
 
-const WEEK_COUNT=3;
+const WEEK_COUNT=3;   // these two variables are used while creating the table( 2d array)
 const HOUR_COUNT=8;
 
 let gunlukAppointment= []; // arrays for storing the marked cells
@@ -16,8 +16,8 @@ class App extends React.Component {
         super()
         this.state = {
             message: "",
-            rowNo: 0,
-            colNo: 0,
+            //rowNo: 0,
+            //colNo: 0,
             beginDay:0
 
         }
@@ -66,8 +66,8 @@ class App extends React.Component {
     storeMarkedGenel(i,j){ // stores the marked cells in the considered arrays or removes them after asking the alert questions
          this.setState ({
                      message:"apply function is called",
-                     rowNo:i,
-                     colNo:j
+                     //rowNo:i,
+                     //colNo:j
 
                 })
         if ( this.isWhichMarked(i,j ) == "notMarked"){
@@ -117,6 +117,14 @@ class App extends React.Component {
         })
     }
 
+    resetApp(){
+        this.setState({
+            beginDay: 0,
+        })
+        haftalikAppointment = [] //empty the array
+        gunlukAppointment = [] //empty the array
+    }
+
     makeHeaderDate(count) {
         var date = new Date();
         date.setDate(date.getDate() + count)
@@ -130,16 +138,9 @@ class App extends React.Component {
     let header = []
     header.push(<th></th>)
 
-    //var date = new Date() ;
-    //console.log(date)
-    //date.setDate(date.getDate()  + 1)
-    //var result =  date.getDate() + "." + (date.getMonth() + 1) + "." + (date.getYear() + 1900);
-    //console.log(result)
-
-    for (var i = 1 + this.state.beginDay  ; i <= WEEK_COUNT * 7 + this.state.beginDay; ++i) {
+    for (var i = 1 + this.state.beginDay  ; i <= WEEK_COUNT * 7 + this.state.beginDay; ++i) { // this create the header part of the frame.
         var headDate = this.makeHeaderDate(i - 1)
         header.push(<th>{headDate}</th>)
-        //header.push(<th>{i}</th>)
     }
     let items = []
     for (let i = 8; i < HOUR_COUNT + 9; i++) { //create hour part in the frame (the first column of the frame )
@@ -177,6 +178,7 @@ class App extends React.Component {
 		    <div>
 		        <button onClick = {() => this.slidePrevWeek()}  >  &#60;&#60; </button>
                 <button onClick = {() => this.slidePrevDay()}  >  &#60; </button>
+                <button onClick = {() => this.resetApp()}  >  |  </button>
 		        <button onClick = {() => this.slideNextDay()}  > >  </button>
 		        <button onClick = {() => this.slideNextWeek()}  > >> </button>
 				<div>{this.getTableContent()}</div>
