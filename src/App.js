@@ -16,32 +16,28 @@ class App extends React.Component {
         super()
         this.state = {
             message: "",
-            //rowNo: 0,
-            //colNo: 0,
-            beginDay:0
+            beginDay:0  // this variable is needed for sliding the frame
 
         }
     }
 
 
-    moveDaily(arr, i, j){ // this function detects the index of the cell which wanted to be removed and removes it from the appointment array
+    moveDaily(arr, saat, gun){ // this function detects the index of the cell which wanted to be removed and removes it from the appointment array
         this.setState({message:"move daily is called"})
-        let value : [number, number] = [i,j]
         for( var k = 0 ; k < arr.length; k++){
-            if ( arr[k][0] == i && arr[k][1] == j + this.state.beginDay ){
+            if ( arr[k][0] == saat && arr[k][1] == gun + this.state.beginDay ){
                 break           // index is needed for splice method
             }
         }
-        arr.splice(k,2)
+        arr.splice(k,1)
     }
 
-    moveWeekly(arr, i , j){ // this function detects the index of the cell which wanted to be removed and removes it from the appointment array
+    moveWeekly(arr, saat , gun){ // this function detects the index of the cell which wanted to be removed and removes it from the appointment array
         this.setState({message:"move weekly is called"})
 
         for( var k = 0; k < arr.length; k++) {
-            if ( arr[k][0] == i && arr[k][1]){
-                arr.splice(k) ;
-                k = 0;
+            if ( arr[k][0] == saat && arr[k][1]  %  7 == (gun + this.state.beginDay) % 7){
+                arr.splice(k,1) ;
             }
         }
     }
@@ -65,14 +61,11 @@ class App extends React.Component {
 
     storeMarkedGenel(i,j){ // stores the marked cells in the considered arrays or removes them after asking the alert questions
          this.setState ({
-                     message:"apply function is called",
-                     //rowNo:i,
-                     //colNo:j
-
+                     message:"apply function is called"
                 })
         if ( this.isWhichMarked(i,j ) == "notMarked"){
             if( window.confirm("Abonelik mi?") == true  ) {
-                haftalikAppointment.push( [i,j])
+                haftalikAppointment.push( [i,j + this.state.beginDay] )
                 return "haftalikAppointmentMarked"
             }
             else{
@@ -81,10 +74,15 @@ class App extends React.Component {
             }
         }else{
             if( window.confirm("Silinsin mi? ") == true) {
-                //silme islemi
-                this.moveDaily(gunlukAppointment, i,j);
-                this.moveWeekly(haftalikAppointment,i,j);
-                return "notMarked";
+                if( this.isWhichMarked(i,j) == "gunlukAppointmentMarked")
+                    this.moveDaily(gunlukAppointment, i,j);
+                else if ( this.isWhichMarked(i,j) == "haftalikAppointmentMarked"){
+                    this.moveWeekly(haftalikAppointment,i,j);
+                }
+                else {
+                    //do nothing
+                }
+                //return "notMarked";
             }
             else{
                 //do nothing
